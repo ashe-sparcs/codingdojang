@@ -35,7 +35,7 @@ int main(int argc, char **argv)
         }
         if(buf[start]=='/')
         {
-            if(buf[start+1]=='/' && !flag) 
+            if(buf[start+1]=='/') 
             {
                 printf("%d\n", line);
                 continue;
@@ -44,33 +44,23 @@ int main(int argc, char **argv)
         }
         if(flag)
         {
-            while(1)
+            char *temp;
+            temp = strstr(buf, "*/");
+            if (!temp) 
             {
-                char *temp;
-                temp = strstr(buf+start+2, "*/");
-                if (!temp) 
+                printf("%d\n", line);
+                continue;
+            }
+            flag=0;
+            termination = (int) (temp - buf);
+            for(i=termination+2;i<len;i++) //블록 코멘트 끝나고 바로 한줄 코멘트 나오는 경우 처리해야
+            {
+                if(buf[i]!=' ')
                 {
-                    printf("%d\n", line);
-                    break;
+                   line++;
+                   printf("%d\n", line);
+                   break;
                 }
-                flag=0;
-                termination = (int) (temp - buf);
-                if (termination == len-2) break;
-                if (buf[termination+2]=='/')
-                {
-                    if (buf[termination+3]=='/') break;
-                    if (buf[termination+3]=='*')
-                    {
-                        start = termination+1;
-                        continue;
-                    }
-                }
-                else if (buf[termination+2] == ' ') 
-                {
-                    char *temp2;
-                    if((temp2 = strstr(buf+termination+3, "/*"))!=NULL) ;
-                }
-                else break;
             }
         }
         else line++;
